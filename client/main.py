@@ -6,7 +6,7 @@ from rich.console import Console
 from rich.prompt import Prompt
 from rich.table import Table
 
-BASE_URL = "http://localhost:4000/api"  
+BASE_URL = "https://cli-chat-1.onrender.com/api"  
 CONFIG_FILE = "config.json"
 SESSION_FILE = "session.json"
 
