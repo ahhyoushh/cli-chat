@@ -114,10 +114,9 @@ def get_unread_messages():
     payload = {"username": username, "password": password}
     response = requests.post(url, json=payload)
     resS = response.text
-    rest = resS[1:-2]
 
     try:
-        msgsList = json.loads(rest)
+        msgsList = json.loads(resS)
         for msg in msgsList:
             author = msg['sender']
             message = msg['message']
@@ -151,7 +150,7 @@ if __name__ == "__main__":
 
         if choice == "1":
             if username == "":
-                print("Please set up your username and password in config.json!")
+                print("Please set up credentials in config.json!")
             signup(username, password)
             time.sleep(2)
 
@@ -168,6 +167,7 @@ if __name__ == "__main__":
             time.sleep(3)
 
         elif choice == "4":
+            os.system('cls')
             sender = config["username"]
             receiver = Prompt.ask("[bold cyan]Enter receiver username[/bold cyan]")
             message = Prompt.ask("[bold cyan]Enter message[/bold cyan]")
