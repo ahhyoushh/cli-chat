@@ -50,7 +50,7 @@ def signup():
 def login():
     url = f"{BASE_URL}/login"
     username = str(console.input("[bold yellow]USERNAME: [/bold yellow]"))
-    password = str(console.input("[boldyellow]PASSWORD: [/bold yellow]"))
+    password = str(console.input("[bold yellow]PASSWORD: [/bold yellow]"))
     config["username"] = username
     config["password"] = password
 
