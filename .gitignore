@@ -20,3 +20,7 @@
 # Go workspace file
 go.work
 go.work.sum
+
+client/session.json
+client/tempCodeRunnerFile.py
+client/config.json

@@ -110,11 +110,12 @@ def get_unread_messages():
     session = load_session()
     username = session["username"]
 
-    url = f"{BASE_URL}/getunreadmsgs"
+    url = f"{BASE_URL}/getunread"
     payload = {"username": username, "password": password}
     response = requests.post(url, json=payload)
     resS = response.text
     rest = resS[1:-2]
+
     try:
         msgsList = json.loads(rest)
         for msg in msgsList:
@@ -122,7 +123,7 @@ def get_unread_messages():
             message = msg['message']
             console.print(f'[bold blue]{author}[/bold blue]: {message}')
     except:
-        console.print("[bold red] No new msgs![/bold red]")
+        console.print("[bold green] No new msgs![/bold green]")
 
 if __name__ == "__main__":
     config = load_config()
@@ -130,6 +131,7 @@ if __name__ == "__main__":
     password = config["password"]
 
     while True:
+        os.system("cls")
         console.print("[bold cyan]CLI Chat Application[/bold cyan]", style="bold blue")
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("Option", style="dim", width=12)
@@ -173,12 +175,14 @@ if __name__ == "__main__":
             time.sleep(3)
 
         elif choice == "5":
+            os.system('cls')
             get_all_messages()
-            break
+            os.system("pause")
 
         elif choice == "6":
+            os.system('cls')
             get_unread_messages()
-            time.sleep(1)
+            os.system("pause")
 
         elif choice == "7":
             if is_logged_in():
