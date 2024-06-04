@@ -34,27 +34,48 @@ def clear_session():
     if os.path.exists(SESSION_FILE):
         os.remove(SESSION_FILE)
 
-def signup(username, password):
+def signup():
     url = f"{BASE_URL}/signup"
+    username=str(console.input("[bold yellow]USERNAME: [/bold yellow]"))
+    password=str(console.input("[bold yellow]PASSWORD: [/bold yellow]"))
     payload = {"username": username, "password": password}
+    payload_dict = json.dumps(payload)
+    with open('config.json', 'w') as of:
+        of.write(payload_dict)
     response = requests.post(url, json=payload)
     message = response.text
     
     console.print(f"[bold green]{message}[/bold green]")
 
-def login(username, password):
+def login():
     url = f"{BASE_URL}/login"
+    username = str(console.input("[bold yellow]USERNAME: [/bold yellow]"))
+    password = str(console.input("[boldyellow]PASSWORD: [/bold yellow]"))
+    config["username"] = username
+    config["password"] = password
+
     payload = {"username": username, "password": password}
+    payload_dict = json.dumps(payload)
+    with open('config.json', 'w') as outfile:
+        outfile.write(payload_dict)
     response = requests.post(url, json=payload)
     if response.status_code == 200:
         save_session({"username": username})
-        
+
     else:
         console.print(response.text, style="bold red")
     return response.status_code == 200
 
 def logout():
     clear_session()
+    config["username"] = ""
+    config["password"] = ""
+    username = config["username"]
+    password = config["password"]
+    payload = {"username": username,"password": password}
+    payload_dict = json.dumps(payload)
+    with open('config.json', 'w') as outfile:
+        outfile.write(payload_dict)
     console.print("[bold green]Logged out successfully[/bold green]")
 
 def is_logged_in():
@@ -151,11 +172,14 @@ if __name__ == "__main__":
         if choice == "1":
             if username == "":
                 print("Please set up credentials in config.json!")
-            signup(username, password)
+
+            os.syte('cls')
+            signup()
             time.sleep(2)
 
         elif choice == "2":
-            if login(username, password):
+            os.system('cls')
+            if login():
                 console.print("[bold green]Login successful[/bold green]")
                 time.sleep(2)
             else:
