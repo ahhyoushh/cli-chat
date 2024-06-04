@@ -99,12 +99,7 @@ func getAllMessages(username string) []model.Conversations {
 }
 
 func getUnreadMessages(username string) []model.Conversations {
-	filter := bson.M{
-		"$or": []bson.M{
-			{"sender": username, "read": false},
-			{"receiver": username, "read": false},
-		},
-	}
+	filter := bson.M{"receiver": username, "read": false}
 
 	option := options.Find().SetSort(bson.D{{Key: "time", Value: 1}})
 
