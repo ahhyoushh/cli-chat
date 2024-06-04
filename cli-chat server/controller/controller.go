@@ -224,10 +224,9 @@ func CreateMsg(w http.ResponseWriter, r *http.Request) {
 	id, _ := primitive.ObjectIDFromHex(convid)
 	msg.Conversation_ID = id
 
-	// Checks if receiver exists
-	var creds userCredentials
+	// Check if receiver exists
 	var user model.User
-	filter := bson.M{"username": creds.Username}
+	filter := bson.M{"username": msg.Receiver}
 	err := usercollection.FindOne(context.Background(), filter).Decode(&user)
 	if err != nil {
 		http.Error(w, "Receiver not found", http.StatusNotFound)
