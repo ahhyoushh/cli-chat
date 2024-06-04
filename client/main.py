@@ -173,7 +173,7 @@ if __name__ == "__main__":
             if username == "":
                 print("Please set up credentials in config.json!")
 
-            os.syte('cls')
+            os.system('cls')
             signup()
             time.sleep(2)
 
