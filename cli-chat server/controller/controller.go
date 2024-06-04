@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 	"os"
+	"time"
 
 	"github.com/TanishkBansode/cli-chat/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,6 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
 var database_string = os.Getenv("DATABASE_STRING")
 var connectionString = database_string // ADD THE DATABASE STRING FROM MONGO DB
 
@@ -131,7 +132,7 @@ func getUnreadMessages(username string) []model.Conversations {
 }
 
 func SetAllMessagesRead(username string) {
-	filter := bson.M{"$or": []bson.M{{"sender": username}, {"receiver": username}}}
+	filter := bson.M{"receiver": username}
 	update := bson.M{"$set": bson.M{"read": true}}
 
 	result, err := chatcollection.UpdateMany(context.Background(), filter, update)
@@ -223,9 +224,23 @@ func CreateMsg(w http.ResponseWriter, r *http.Request) {
 	id, _ := primitive.ObjectIDFromHex(convid)
 	msg.Conversation_ID = id
 
+	// Checks if receiver exists
+	var creds userCredentials
+	var user model.User
+	filter := bson.M{"username": creds.Username}
+	err := usercollection.FindOne(context.Background(), filter).Decode(&user)
+	if err != nil {
+		http.Error(w, "Receiver not found", http.StatusNotFound)
+		return
+	}
+
 	// Update conversations for both sender and receiver using their usernames
-	updateConversations(msg.Sender, convid)
-	updateConversations(msg.Receiver, convid)
+	if msg.Sender == msg.Receiver {
+		updateConversations(msg.Sender, convid)
+	} else {
+		updateConversations(msg.Sender, convid)
+		updateConversations(msg.Receiver, convid)
+	}
 
 	json.NewEncoder(w).Encode(msg)
 }
