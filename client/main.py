@@ -5,9 +5,41 @@ import os
 from rich.console import Console
 from rich.prompt import Prompt
 from rich.table import Table
+import subprocess
+
+# Get the directory of the script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.path.join(script_dir, "config.json")
+
+def addtopath():
+    
+   
+    # Get the current PATH environment variable
+    current_path = os.environ.get('PATH', '')
+    
+    # Check if the script directory is already in the PATH
+    if script_dir not in current_path.split(os.pathsep):
+        # Construct the new PATH
+        new_path = f"{script_dir}{os.pathsep}{current_path}"
+        
+        # Use setx to set the PATH permanently
+        subprocess.run(['setx', 'PATH', new_path], shell=True)
+        
+        print(f"Directory {script_dir} added to PATH.")
+    else:
+        print(f"Directory {script_dir} is already in the PATH.")
+
+def main():
+    # Your main script logic here
+    print("Running main script...")
+
+if __name__ == "__main__":
+    addtopath()
+    main()
 
 BASE_URL = "https://cli-chat-1.onrender.com/api"  
-CONFIG_FILE = "config.json"
+CONFIG_FILE = os.path.join(script_dir, "config.json")
+
 SESSION_FILE = "session.json"
 
 console = Console()
