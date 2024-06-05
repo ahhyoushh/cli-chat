@@ -9,7 +9,6 @@ import subprocess
 
 # Get the directory of the script
 script_dir = os.path.dirname(os.path.abspath(__file__))
-CONFIG_FILE = os.path.join(script_dir, "config.json")
 
 def addtopath():
     
@@ -39,8 +38,9 @@ if __name__ == "__main__":
 
 BASE_URL = "https://cli-chat-1.onrender.com/api"  
 CONFIG_FILE = os.path.join(script_dir, "config.json")
+SESSION_FILE = os.path.join(script_dir, "session.json")
 
-SESSION_FILE = "session.json"
+
 
 console = Console()
 
